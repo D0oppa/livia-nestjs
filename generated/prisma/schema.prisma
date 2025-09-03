@@ -1,0 +1,151 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Test {
+  id   Int    @id @default(autoincrement())
+  name String
+}
+
+model appointment {
+  id                 BigInt              @id @default(autoincrement())
+  patient_id         BigInt?
+  doctor_id          BigInt?
+  date               DateTime            @db.Timestamp(6)
+  ailment            String
+  area               String?
+  payment_method_id  BigInt?
+  state_id           BigInt?
+  created_at         DateTime?           @default(now()) @db.Timestamp(6)
+  updated_at         DateTime?           @default(now()) @db.Timestamp(6)
+  deleted_at         DateTime?           @db.Timestamp(6)
+  doctor             doctor?             @relation(fields: [doctor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  patient            patient?            @relation(fields: [patient_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  payment_method     payment_method?     @relation(fields: [payment_method_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  appointment_states appointment_states? @relation(fields: [state_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model appointment_states {
+  id          BigInt        @id @default(autoincrement())
+  name        String
+  created_at  DateTime?     @default(now()) @db.Timestamp(6)
+  updated_at  DateTime?     @default(now()) @db.Timestamp(6)
+  deleted_at  DateTime?     @db.Timestamp(6)
+  appointment appointment[]
+}
+
+model business {
+  id            BigInt          @id @default(autoincrement())
+  name          String
+  address       String
+  hours         String
+  created_at    DateTime?       @default(now()) @db.Timestamp(6)
+  updated_at    DateTime?       @default(now()) @db.Timestamp(6)
+  deleted_at    DateTime?       @db.Timestamp(6)
+  conversations conversations[]
+  doctor        doctor[]
+}
+
+model conversations {
+  id          BigInt     @id @default(autoincrement())
+  patient_id  BigInt?
+  business_id BigInt?
+  created_at  DateTime?  @default(now()) @db.Timestamp(6)
+  updated_at  DateTime?  @default(now()) @db.Timestamp(6)
+  deleted_at  DateTime?  @db.Timestamp(6)
+  business    business?  @relation(fields: [business_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  patient     patient?   @relation(fields: [patient_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  messages    messages[]
+}
+
+model doctor {
+  id            BigInt          @id @default(autoincrement())
+  name          String
+  specialty     String
+  negocio_id    BigInt?
+  created_at    DateTime?       @default(now()) @db.Timestamp(6)
+  updated_at    DateTime?       @default(now()) @db.Timestamp(6)
+  deleted_at    DateTime?       @db.Timestamp(6)
+  appointment   appointment[]
+  business      business?       @relation(fields: [negocio_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  notes         notes[]
+  notifications notifications[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model messages {
+  id              BigInt         @id @default(autoincrement())
+  content         String
+  date            DateTime?      @default(now()) @db.Timestamp(6)
+  patient_id      BigInt?
+  conversation_id BigInt?
+  type            String?
+  wss_number      String?
+  created_at      DateTime?      @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?      @default(now()) @db.Timestamp(6)
+  deleted_at      DateTime?      @db.Timestamp(6)
+  conversations   conversations? @relation(fields: [conversation_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  patient         patient?       @relation(fields: [patient_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model notes {
+  id         BigInt    @id @default(autoincrement())
+  doctor_id  BigInt?
+  patient_id BigInt?
+  content    String
+  date       DateTime? @default(now()) @db.Timestamp(6)
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @default(now()) @db.Timestamp(6)
+  deleted_at DateTime? @db.Timestamp(6)
+  doctor     doctor?   @relation(fields: [doctor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  patient    patient?  @relation(fields: [patient_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model notifications {
+  id          BigInt    @id @default(autoincrement())
+  patient_id  BigInt?
+  doctor_id   BigInt?
+  message     String
+  title       String?
+  description String?
+  link        String?
+  external_id String?
+  seen        Boolean?  @default(false)
+  seen_time   DateTime? @db.Timestamp(6)
+  date        DateTime? @default(now()) @db.Timestamp(6)
+  created_at  DateTime? @default(now()) @db.Timestamp(6)
+  updated_at  DateTime? @default(now()) @db.Timestamp(6)
+  deleted_at  DateTime? @db.Timestamp(6)
+  doctor      doctor?   @relation(fields: [doctor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  patient     patient?  @relation(fields: [patient_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model patient {
+  id            BigInt          @id @default(autoincrement())
+  id_number     String          @unique
+  age           Int
+  name          String
+  created_at    DateTime?       @default(now()) @db.Timestamp(6)
+  updated_at    DateTime?       @default(now()) @db.Timestamp(6)
+  deleted_at    DateTime?       @db.Timestamp(6)
+  appointment   appointment[]
+  conversations conversations[]
+  messages      messages[]
+  notes         notes[]
+  notifications notifications[]
+}
+
+model payment_method {
+  id          BigInt        @id @default(autoincrement())
+  type        String
+  created_at  DateTime?     @default(now()) @db.Timestamp(6)
+  updated_at  DateTime?     @default(now()) @db.Timestamp(6)
+  deleted_at  DateTime?     @db.Timestamp(6)
+  appointment appointment[]
+}
