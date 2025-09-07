@@ -1,4 +1,4 @@
-import { Body, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 
@@ -15,27 +15,37 @@ export class DoctorsService {
   }
 
   async findAll() {
-    const doctors = await this.prisma.doctor.findMany();
+    const doctors = await this.prisma.doctor.findMany({
+      where: { deleted_at: null },
+    });
     return doctors;
   }
 
   async findByBusinessId(businessId: number) {
     return this.prisma.doctor.findMany({
-      where: { negocio_id: businessId },
+      where: {
+        negocio_id: businessId,
+        deleted_at: null,
+      },
     });
   }
 
   async findBySpecialty(specialty: string) {
     return this.prisma.doctor.findMany({
-      where: { specialty },
+      where: {
+        specialty,
+        deleted_at: null,
+      },
     });
   }
 
   async findOne(id: number) {
-    const doctor = await this.prisma.doctor.findUnique({
-      where: { id },
+    const doctor = await this.prisma.doctor.findFirst({
+      where: {
+        id,
+        deleted_at: null,
+      },
     });
-
     return doctor;
   }
 
