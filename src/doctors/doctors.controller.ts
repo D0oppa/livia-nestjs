@@ -25,7 +25,6 @@ export class DoctorsController {
     return this.doctorService.findAll();
   }
 
-  @Get(':id')
   @Get('business/:businessId')
   async findDoctorsByBusiness(@Param('businessId') businessId: number) {
     return this.doctorService.findByBusinessId(Number(businessId));
@@ -35,6 +34,8 @@ export class DoctorsController {
   async findDoctorsBySpecialty(@Param('specialty') specialty: string) {
     return this.doctorService.findBySpecialty(specialty);
   }
+
+  @Get(':id')
   async findDoctorById(@Param('id') id: number) {
     return this.doctorService.findOne(id);
   }
