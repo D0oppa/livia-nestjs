@@ -24,7 +24,17 @@ export class DoctorsController {
   async findAllDoctors() {
     return this.doctorService.findAll();
   }
+
   @Get(':id')
+  @Get('business/:businessId')
+  async findDoctorsByBusiness(@Param('businessId') businessId: number) {
+    return this.doctorService.findByBusinessId(Number(businessId));
+  }
+
+  @Get('specialty/:specialty')
+  async findDoctorsBySpecialty(@Param('specialty') specialty: string) {
+    return this.doctorService.findBySpecialty(specialty);
+  }
   async findDoctorById(@Param('id') id: number) {
     return this.doctorService.findOne(id);
   }

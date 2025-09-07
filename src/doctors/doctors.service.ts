@@ -19,6 +19,18 @@ export class DoctorsService {
     return doctors;
   }
 
+  async findByBusinessId(businessId: number) {
+    return this.prisma.doctor.findMany({
+      where: { negocio_id: businessId },
+    });
+  }
+
+  async findBySpecialty(specialty: string) {
+    return this.prisma.doctor.findMany({
+      where: { specialty },
+    });
+  }
+
   async findOne(id: number) {
     const doctor = await this.prisma.doctor.findUnique({
       where: { id },
