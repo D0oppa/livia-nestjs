@@ -1,0 +1,57 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { DoctorsService } from './doctors.service';
+import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { UpdateDoctorDto } from './dto/update-doctor.dto';
+
+@Controller('doctors')
+export class DoctorsController {
+  constructor(private readonly doctorService: DoctorsService) {}
+
+  @Post()
+  async createDoctor(@Body() dto: CreateDoctorDto) {
+    return this.doctorService.create(dto);
+  }
+
+  @Get()
+  async findAllDoctors() {
+    return this.doctorService.findAll();
+  }
+
+  @Get('business/:businessId')
+  async findDoctorsByBusiness(@Param('businessId') businessId: number) {
+    return this.doctorService.findByBusinessId(Number(businessId));
+  }
+
+  @Get('specialty/:specialty')
+  async findDoctorsBySpecialty(@Param('specialty') specialty: string) {
+    return this.doctorService.findBySpecialty(specialty);
+  }
+
+  @Get(':id')
+  async findDoctorById(@Param('id') id: number) {
+    return this.doctorService.findOne(id);
+  }
+
+  @Patch(':id')
+  async updateDoctor(@Param('id') id: number, @Body() dto: UpdateDoctorDto) {
+    return this.doctorService.update(id, dto);
+  }
+
+  @Delete(':id')
+  async deleteDoctor(@Param('id') id: number) {
+    return this.doctorService.deleteDoctor(id);
+  }
+
+  @Patch('soft-delete/:id')
+  async softDeleteDoctor(@Param('id') id: number) {
+    return this.doctorService.softDelete(id);
+  }
+}
