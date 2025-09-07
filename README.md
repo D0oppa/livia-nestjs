@@ -128,6 +128,247 @@ Create a new doctor in the system.
 - `400 Bad Request`: Invalid input data
 - `500 Internal Server Error`: Server error
 
+#### `GET /doctors`
+
+Retrieve all doctors in the system.
+
+**Request URL Example:**
+
+```
+http://localhost:3000/doctors
+```
+
+**Response (200):**
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Dr. Juan Pérez",
+    "specialty": "Physiotherapy",
+    "negocio_id": 1,
+    "created_at": "2025-01-15T10:30:00.000Z",
+    "updated_at": "2025-01-15T10:30:00.000Z",
+    "deleted_at": null
+  },
+  {
+    "id": 2,
+    "name": "Dr. María Gómez",
+    "specialty": "Cardiology",
+    "negocio_id": 1,
+    "created_at": "2025-01-16T12:00:00.000Z",
+    "updated_at": "2025-01-16T12:00:00.000Z",
+    "deleted_at": null
+  }
+]
+```
+
+**Possible Errors:**
+
+- `500 Internal Server Error`: Server error
+
+#### `GET /doctors/:id`
+
+Retrieve a specific doctor by their ID.
+
+**Request URL Example:**
+
+```
+http://localhost:3000/doctors/1
+```
+
+**Response (200):**
+
+```json
+{
+  "id": 1,
+  "name": "Dr. Juan Pérez",
+  "specialty": "Physiotherapy",
+  "negocio_id": 1,
+  "created_at": "2025-01-15T10:30:00.000Z",
+  "updated_at": "2025-01-15T10:30:00.000Z",
+  "deleted_at": null
+}
+```
+
+**Possible Errors:**
+
+- `404 Not Found`: Doctor with the specified ID not found
+- `500 Internal Server Error`: Server error
+
+#### `GET /doctors/business/:businessId`
+
+Retrieve all doctors associated with a specific business ID.
+
+**Request URL Example:**
+
+```
+http://localhost:3000/doctors/business/1
+```
+
+**Response (200):**
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Dr. Juan Pérez",
+    "specialty": "Physiotherapy",
+    "negocio_id": 1,
+    "created_at": "2025-01-15T10:30:00.000Z",
+    "updated_at": "2025-01-15T10:30:00.000Z",
+    "deleted_at": null
+  },
+  {
+    "id": 2,
+    "name": "Dr. María Gómez",
+    "specialty": "Cardiology",
+    "negocio_id": 1,
+    "created_at": "2025-01-16T12:00:00.000Z",
+    "updated_at": "2025-01-16T12:00:00.000Z",
+    "deleted_at": null
+  }
+]
+```
+
+**Possible Errors:**
+
+- `500 Internal Server Error`: Server error
+
+#### `GET /doctors/specialty/:specialty`
+
+Retrieve all doctors with a specific specialty.
+
+**Request URL Example:**
+
+```
+http://localhost:3000/doctors/specialty/Physiotherapy
+```
+
+**Response (200):**
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Dr. Juan Pérez",
+    "specialty": "Physiotherapy",
+    "negocio_id": 1,
+    "created_at": "2025-01-15T10:30:00.000Z",
+    "updated_at": "2025-01-15T10:30:00.000Z",
+    "deleted_at": null
+  }
+]
+```
+
+**Possible Errors:**
+
+- `500 Internal Server Error`: Server error
+
+#### `PATCH /doctors/:id`
+
+Update a doctor's information by their ID.
+
+**Request URL Example:**
+
+```
+http://localhost:3000/doctors/1
+```
+
+**Request Body:**
+
+```json
+{
+  "name": "Dr. Juan Pérez Updated",
+  "specialty": "Neurology",
+  "negocio_id": 2
+}
+```
+
+**Validations:**
+
+- `name`: Optional string, cannot be empty if provided
+- `specialty`: Optional string
+- `negocio_id`: Optional number
+
+**Response (200):**
+
+```json
+{
+  "id": 1,
+  "name": "Dr. Juan Pérez Updated",
+  "specialty": "Neurology",
+  "negocio_id": 2,
+  "created_at": "2025-01-15T10:30:00.000Z",
+  "updated_at": "2025-01-17T14:00:00.000Z",
+  "deleted_at": null
+}
+```
+
+**Possible Errors:**
+
+- `400 Bad Request`: Invalid input data
+- `404 Not Found`: Doctor with the specified ID not found
+- `500 Internal Server Error`: Server error
+
+#### `DELETE /doctors/:id`
+
+Permanently delete a doctor by their ID.
+
+**Request URL Example:**
+
+```
+http://localhost:3000/doctors/1
+```
+
+**Response (200):**
+
+```json
+{
+  "id": 1,
+  "name": "Dr. Juan Pérez",
+  "specialty": "Physiotherapy",
+  "negocio_id": 1,
+  "created_at": "2025-01-15T10:30:00.000Z",
+  "updated_at": "2025-01-15T10:30:00.000Z",
+  "deleted_at": null
+}
+```
+
+**Possible Errors:**
+
+- `404 Not Found`: Doctor with the specified ID not found
+- `500 Internal Server Error`: Server error
+
+#### `PATCH /doctors/soft-delete/:id`
+
+Soft delete a doctor by their ID (marks as deleted without removing from the database).
+
+**Request URL Example:**
+
+```
+http://localhost:3000/doctors/soft-delete/1
+```
+
+**Response (200):**
+
+```json
+{
+  "id": 1,
+  "name": "Dr. Juan Pérez",
+  "specialty": "Physiotherapy",
+  "negocio_id": 1,
+  "created_at": "2025-01-15T10:30:00.000Z",
+  "updated_at": "2025-01-17T14:00:00.000Z",
+  "deleted_at": "2025-01-17T14:00:00.000Z"
+}
+```
+
+**Possible Errors:**
+
+- `404 Not Found`: Doctor with the specified ID not found
+- `500 Internal Server Error`: Server error
+
 ---
 
 ### 👥 Patients
