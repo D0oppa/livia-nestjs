@@ -38,4 +38,9 @@ export class DoctorsController {
   async deleteDoctor(@Param('id') id: number) {
     return this.doctorService.deleteDoctor(id);
   }
+
+  @Patch('soft-delete/:id')
+  async softDeleteDoctor(@Param('id') id: number) {
+    return this.doctorService.softDelete(id);
+  }
 }

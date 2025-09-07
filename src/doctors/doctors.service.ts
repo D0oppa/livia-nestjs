@@ -41,6 +41,19 @@ export class DoctorsService {
     return updatedDoctor;
   }
 
+  async softDelete(id: number) {
+    const existingDoctor = await this.findOne(id);
+    if (!existingDoctor) {
+      throw new NotFoundException(`Doctor with ID ${id} not found`);
+    }
+    const softDeletedDoctor = await this.prisma.doctor.update({
+      where: { id },
+      data: { deleted_at: new Date() },
+    });
+
+    return softDeletedDoctor;
+  }
+
   async deleteDoctor(id: number) {
     const existingDoctor = await this.findOne(id);
     if (!existingDoctor) {
