@@ -1,98 +1,224 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Livia Backend - API Documentation
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 📋 Table of Contents
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [Setup](#setup)
+- [Authentication](#authentication)
+- [API Endpoints](#api-endpoints)
+  - [Doctors](#doctors)
+  - [Patients](#patients) _(Pending)_
+  - [Appointments](#appointments) _(Pending)_
+  - [Business](#business) _(Pending)_
+  - [Conversations](#conversations) _(Pending)_
+  - [Messages](#messages) _(Pending)_
+  - [Notifications](#notifications) _(Pending)_
+  - [Notes](#notes) _(Pending)_
+  - [Appointment States](#appointment-states) _(Pending)_
+- [Status Codes](#status-codes)
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📖 Overview
 
-## Project setup
+Livia Backend is a REST API built with NestJS that manages a medical appointment system through a WhatsApp bot powered by Gemini AI. Users can book, check, reschedule, and cancel medical appointments through automated conversations.
 
-```bash
-$ npm install
+### Key Features:
+
+- 🤖 WhatsApp bot integration with Gemini AI for appointment management
+- 👨‍⚕️ Doctor and specialty management
+- 👥 Patient administration
+- 📅 Complete medical appointment system
+- 💬 Conversation history tracking
+- 🔔 Notification system
+
+---
+
+## 🛠 Tech Stack
+
+- **Framework**: NestJS 11.0.1
+- **Database**: PostgreSQL
+- **ORM**: Prisma 6.14.0
+- **Validation**: class-validator, class-transformer
+- **Language**: TypeScript 5.7.3
+- **AI Integration**: Gemini AI
+
+---
+
+## ⚙️ Setup
+
+### Environment Variables
+
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/livia_db"
+PORT=3000
 ```
 
-## Compile and run the project
+### Installation
 
 ```bash
-# development
-$ npm run start
+# Install dependencies
+npm install
 
-# watch mode
-$ npm run start:dev
+# Run Prisma migrations
+npx prisma migrate dev
 
-# production mode
-$ npm run start:prod
+# Start development server
+npm run start:dev
 ```
 
-## Run tests
+### Global Validation
 
-```bash
-# unit tests
-$ npm run test
+The project uses global validation configured in `main.ts`:
 
-# e2e tests
-$ npm run test:e2e
+- ✅ Whitelist enabled (removes extra fields)
+- ❌ Non-whitelisted fields throw errors
+- 🔄 Automatic type transformation
+- 📝 class-validator for DTOs
 
-# test coverage
-$ npm run test:cov
+---
+
+## 🔐 Authentication
+
+_To be implemented_
+
+---
+
+## 🚀 API Endpoints
+
+### 👨‍⚕️ Doctors
+
+#### `POST /doctors`
+
+Create a new doctor in the system.
+
+**Request Body:**
+
+```json
+{
+  "name": "Dr. Juan Pérez",
+  "specialty": "Physiotherapy",
+  "negocio_id": 1
+}
 ```
 
-## Deployment
+**Validations:**
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+- `name`: Required string, cannot be empty
+- `specialty`: Optional string
+- `negocio_id`: Optional number
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+**Response (201):**
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+```json
+{
+  "id": 1,
+  "name": "Dr. Juan Pérez",
+  "specialty": "Physiotherapy",
+  "negocio_id": 1,
+  "created_at": "2025-01-15T10:30:00.000Z",
+  "updated_at": "2025-01-15T10:30:00.000Z",
+  "deleted_at": null
+}
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+**Possible Errors:**
 
-## Resources
+- `400 Bad Request`: Invalid input data
+- `500 Internal Server Error`: Server error
 
-Check out a few resources that may come in handy when working with NestJS:
+---
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### 👥 Patients
 
-## Support
+_Endpoints to be implemented_
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+### 📅 Appointments
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+_Endpoints to be implemented_
 
-## License
+---
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### 🏢 Business
+
+_Endpoints to be implemented_
+
+---
+
+### 💬 Conversations
+
+_Endpoints to be implemented_
+
+---
+
+### 📨 Messages
+
+_Endpoints to be implemented_
+
+---
+
+### 🔔 Notifications
+
+_Endpoints to be implemented_
+
+---
+
+### 📝 Notes
+
+_Endpoints to be implemented_
+
+---
+
+### 📊 Appointment States
+
+_Endpoints to be implemented_
+
+---
+
+## 📋 Status Codes
+
+### HTTP Status Codes:
+
+- `200 OK`: Successful request
+- `201 Created`: Resource created successfully
+- `400 Bad Request`: Invalid input data
+- `401 Unauthorized`: Not authorized
+- `404 Not Found`: Resource not found
+- `500 Internal Server Error`: Internal server error
+
+### Validation States:
+
+- Missing required fields
+- Incorrect data types
+- Non-whitelisted fields in request
+
+---
+
+## 🚧 Project Status
+
+**Implemented Features:**
+
+- ✅ Create doctors
+- ✅ Global validation setup
+- ✅ Prisma data models
+
+**Upcoming Features:**
+
+- 🔄 Complete CRUD for doctors
+- 🔄 Patient management
+- 🔄 Appointment system
+- 🔄 WhatsApp bot with Gemini AI
+- 🔄 Notification system
+
+---
+
+## 📝 Development Notes
+
+- All models include soft delete (`deleted_at`)
+- Validations handled with class-validator
+- Automatic type transformation
+- PostgreSQL database
+- Prisma auto-generates TypeScript types
